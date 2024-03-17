@@ -1,0 +1,120 @@
+
+1. `# K Nearest Neighbors`：这是一个注释，说明这个文件是实现 K 最近邻（KNN）算法的。
+
+2-3. `import sys` 和 `import numpy as np`：这两行代码导入了 Python 的 `sys` 模块和 `numpy` 库。`sys` 模块提供了一些与 Python 解释器交互的函数和变量。`numpy` 是一个用于处理数组的 Python 库。
+
+4. `import pickle`：这行代码导入了 Python 的 `pickle` 模块，用于序列化和反序列化 Python 对象结构。
+
+5. `from sklearn import model_selection`：这行代码从 `sklearn` 库导入了 `model_selection` 模块，该模块包含了许多模型选择和评估的工具。
+
+6. `from sklearn.neighbors import KNeighborsClassifier`：这行代码从 `sklearn.neighbors` 模块导入了 `KNeighborsClassifier` 类，这是实现 KNN 算法的类。
+
+7. `from sklearn.metrics import accuracy_score, confusion_matrix`：这行代码从 `sklearn.metrics` 模块导入了 `accuracy_score` 和 `confusion_matrix` 函数，这两个函数用于评估模型的性能。
+
+8-9. `from MNIST_Dataset_Loader.mnist_loader import MNIST`：这行代码从 `MNIST_Dataset_Loader.mnist_loader` 模块导入了 `MNIST` 类，这个类用于加载 MNIST 数据集。
+
+10-12. `import matplotlib.pyplot as plt` 和 `from matplotlib import style`：这两行代码导入了 `matplotlib.pyplot` 和 `matplotlib.style`，这两个模块用于绘制图形和设置图形的样式。
+
+14. `style.use('ggplot')`：这行代码设置了 `matplotlib` 的样式为 'ggplot'。
+
+16-18. 这三行被注释掉的代码原本用于重定向标准输出到一个名为 "summary.log" 的文件。
+
+20. `print('\nLoading MNIST Data...')`：这行代码打印出一条消息，表示正在加载 MNIST 数据。
+
+22. `data = MNIST('./MNIST_Dataset_Loader/dataset/')`：这行代码创建了一个 `MNIST` 对象，用于加载存储在指定路径下的 MNIST 数据集。
+
+24. `print('\nLoading Training Data...')`：这行代码打印出一条消息，表示正在加载训练数据。
+
+25-26. `img_train, labels_train = data.load_training()`：这行代码调用 `MNIST` 对象的 `load_training` 方法，加载训练数据，并将返回的图像和标签分别赋值给 `img_train` 和 `labels_train`。
+
+27. `train_img = np.array(img_train)`：这行代码将训练图像列表转换为 numpy 数组，赋值给 `train_img`。
+
+28. `print('\nLoading Testing Data...')`：这行代码打印出一条消息，表示正在加载测试数据。
+
+29. `img_test, labels_test = data.load_testing()`：这行代码调用 `MNIST` 对象的 `load_testing` 方法，加载测试数据，并将返回的图像和标签分别赋值给 `img_test` 和 `labels_test`。
+
+30. `test_img = np.array(img_test)`：这行代码将测试图像列表转换为 numpy 数组，赋值给 `test_img`。
+
+31. `test_labels = np.array(labels_test)`：这行代码将测试标签列表转换为 numpy 数组，赋值给 `test_labels`。
+
+34. `X = train_img`：这行代码将训练图像的 numpy 数组赋值给 `X`，`X` 通常用作机器学习模型的特征。
+
+这段代码主要是加载 MNIST 数据集的训练数据和测试数据，并将它们转换为 numpy 数组，以便后续的机器学习模型训练和测试。
+
+33. `y = train_labels`：这行代码将训练标签的 numpy 数组赋值给 `y`，`y` 通常用作机器学习模型的目标变量。
+
+35. `print('\nPreparing Classifier Training and Validation Data...')`：这行代码打印出一条消息，表示正在准备分类器的训练和验证数据。
+
+36. `X_train, X_test, y_train, y_test = model_selection.train_test_split(X,y,test_size=0.1)`：这行代码使用 `sklearn.model_selection.train_test_split` 函数将数据集分割为训练集和测试集。测试集的大小为原始数据集的10%。
+
+38. `print('\nKNN Classifier with n_neighbors = 5, metric = euclidean')`：这行代码打印出一条消息，表示正在使用欧氏距离指标和5个邻居创建 KNN 分类器。
+
+39. `clf = KNeighborsClassifier(n_neighbors=5, metric='euclidean')`：这行代码创建了一个 KNN 分类器实例，设置邻居数量为5，距离度量为欧氏距离。
+
+41. `clf.fit(X_train,y_train)`：这行代码使用训练数据和对应的标签来训练 KNN 分类器。
+
+43. `print('\nMaking Predictions on Validation Data...')`：这行代码打印出一条消息，表示正在对验证数据进行预测。
+
+44. `y_pred = clf.predict(X_test)`：这行代码使用训练好的 KNN 分类器对测试数据进行预测，预测结果保存在 `y_pred` 中。
+
+46. `print('\nCalculating Accuracy of Trained Classifier on Validation Data...')`：这行代码打印出一条消息，表示正在计算训练好的分类器在验证数据上的准确率。
+
+47. `accuracy = accuracy_score(y_test, y_pred)`：这行代码使用 `sklearn.metrics.accuracy_score` 函数计算分类器在验证数据上的准确率。
+
+49. `print('\nCreating Confusion Matrix for Validation Data...')`：这行代码打印出一条消息，表示正在为验证数据创建混淆矩阵。
+
+50. `conf_mat = confusion_matrix(y_test,y_pred)`：这行代码使用 `sklearn.metrics.confusion_matrix` 函数创建了一个混淆矩阵，混淆矩阵是一种特定的表格布局，用于可视化机器学习算法性能的混淆。
+
+这段代码主要是创建和训练 KNN 分类器，然后对验证数据进行预测，并计算预测的准确率和混淆矩阵。
+
+59. `confidence = clf.score(X_test,y_test)`：这行代码计算了分类器在测试数据上的得分（准确率），并将其赋值给 `confidence`。
+
+61. `print('\nMaking Predictions on Validation Data...')`：这行代码打印出一条消息，表示正在对验证数据进行预测。
+
+62. `y_pred = clf.predict(X_test)`：这行代码使用训练好的 KNN 分类器对测试数据进行预测，预测结果保存在 `y_pred` 中。
+
+64. `print('\nCalculating Accuracy of Predictions...')`：这行代码打印出一条消息，表示正在计算预测的准确率。
+
+65. `accuracy = accuracy_score(y_test, y_pred)`：这行代码使用 `sklearn.metrics.accuracy_score` 函数计算分类器在验证数据上的准确率。
+
+67. `print('\nCreating Confusion Matrix...')`：这行代码打印出一条消息，表示正在创建混淆矩阵。
+
+68. `conf_mat = confusion_matrix(y_test,y_pred)`：这行代码使用 `sklearn.metrics.confusion_matrix` 函数创建了一个混淆矩阵。
+
+70-74. 这几行代码打印出了分类器的信心度、预测值、准确率和混淆矩阵。
+
+76-82. 这几行代码使用 matplotlib 库绘制了混淆矩阵的热力图，并显示了图形。
+
+84. `print('\nMaking Predictions on Test Input Images...')`：这行代码打印出一条消息，表示正在对测试输入图像进行预测。
+
+85. `test_labels_pred = clf.predict(test_img)`：这行代码使用训练好的 KNN 分类器对测试图像进行预测，预测结果保存在 `test_labels_pred` 中。
+
+这段代码主要是对测试数据进行预测，计算预测的准确率和混淆矩阵，并绘制混淆矩阵的热力图。然后，它对测试输入图像进行预测。
+
+86. `print('\nCalculating Accuracy of Predictions on Test Input Images...')`：这行代码打印出一条消息，表示正在计算对测试输入图像的预测的准确率。
+
+87. `accuracy = accuracy_score(test_labels, test_labels_pred)`：这行代码使用 `sklearn.metrics.accuracy_score` 函数计算分类器在测试输入图像上的预测的准确率。
+
+89. `print('\nCreating Confusion Matrix for Test Input Images...')`：这行代码打印出一条消息，表示正在为测试输入图像创建混淆矩阵。
+
+90. `conf_mat_test = confusion_matrix(test_labels,test_labels_pred)`：这行代码使用 `sklearn.metrics.confusion_matrix` 函数创建了一个混淆矩阵，混淆矩阵是一种特定的表格布局，用于可视化机器学习算法性能的混淆。
+
+92-96. 这几行代码打印出了预测值、准确率和混淆矩阵。
+
+98-104. 这几行代码使用 matplotlib 库绘制了混淆矩阵的热力图，并显示了图形。
+
+这段代码主要是对测试输入图像进行预测，计算预测的准确率和混淆矩阵，并绘制混淆矩阵的热力图。
+
+105. `a = np.random.randint(1,50,20)`：这行代码使用 `numpy.random.randint` 函数生成了一个包含20个随机整数的数组，这些整数在1到50之间。
+
+106. `for i in a:`：这行代码开始了一个循环，对数组 `a` 中的每个元素进行迭代。
+
+107. `two_d = (np.reshape(test_img[i], (28, 28)) * 255).astype(np.uint8)`：这行代码首先使用 `numpy.reshape` 函数将 `test_img[i]` 重塑为一个 28x28 的二维数组，然后乘以 255（将像素值从 0-1 范围转换到 0-255 范围），最后使用 `numpy.ndarray.astype` 方法将结果转换为 `uint8` 类型。
+
+108. `plt.title('Original Label: {0}  Predicted Label: {1}'.format(test_labels[i],test_labels_pred[i]))`：这行代码设置了图形的标题，显示了原始标签和预测标签。
+
+109. `plt.imshow(two_d, interpolation='nearest',cmap='gray')`：这行代码使用 matplotlib 的 `imshow` 函数显示了图像。`interpolation='nearest'` 参数表示使用最近邻插值，`cmap='gray'` 参数表示使用灰度色图。
+
+110. `plt.show()`：这行代码显示了图形。
+
+这段代码的主要目的是显示一些测试图像及其原始标签和预测标签。

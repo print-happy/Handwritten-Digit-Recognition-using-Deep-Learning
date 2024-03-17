@@ -1,13 +1,16 @@
 import numpy as np
 import argparse
 import cv2
-from cnn.neural_network import CNN
-from keras.utils import np_utils
+from keras.layers import Conv2D
+import tensorflow as tf
 from keras.optimizers import SGD
-# from sklearn.datasets import fetch_mldata
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
+import argparse
+from keras.utils import to_categorical
+from cnn.neural_network import CNN
 
+# from sklearn.datasets import fetch_mldata
 
 # Parse the Arguments
 ap = argparse.ArgumentParser()
@@ -22,7 +25,7 @@ print('Loading MNIST Dataset...')
 dataset = fetch_openml('mnist_784')
 
 # Read the MNIST data as array of 784 pixels and convert to 28x28 image matrix 
-mnist_data = dataset.data.reshape((dataset.data.shape[0], 28, 28))
+mnist_data = dataset.data.values.reshape((dataset.data.shape[0], 28, 28))
 mnist_data = mnist_data[:, np.newaxis, :, :]
 
 # Divide data into testing and training sets.
@@ -33,12 +36,12 @@ img_rows, img_columns = 28, 28
 
 # Transform training and testing data to 10 classes in range [0,classes] ; num. of classes = 0 to 9 = 10 classes
 total_classes = 10			# 0 to 9 labels
-train_labels = np_utils.to_categorical(train_labels, 10)
-test_labels = np_utils.to_categorical(test_labels, 10)
+train_labels = to_categorical(train_labels, 10)
+test_labels = to_categorical(test_labels, 10)
 
 # Defing and compile the SGD optimizer and CNN model
 print('\n Compiling model...')
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = SGD(learning_rate=0.01, momentum=0.9, nesterov=True)
 clf = CNN.build(width=28, height=28, depth=1, total_classes=10, Saved_Weights_Path=args["save_weights"] if args["load_model"] > 0 else None)
 clf.compile(loss="categorical_crossentropy", optimizer=sgd, metrics=["accuracy"])
 
@@ -78,7 +81,7 @@ for num in np.random.choice(np.arange(0, len(test_labels)), size=(5,)):
 
 	# Show and print the Actual Image and Predicted Label Value
 	print('Predicted Label: {}, Actual Value: {}'.format(prediction[0],np.argmax(test_labels[num])))
-# 	cv2.imshow('Digits', image)
-# 	cv2.waitKey(0)
+#     cv2.imshow('Digits', image)
+#     cv2.waitKey(0)
 
 #---------------------- EOC ---------------------

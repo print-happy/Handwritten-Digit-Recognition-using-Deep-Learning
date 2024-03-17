@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./CNN_Keras/cnn"
+    ]
+}
