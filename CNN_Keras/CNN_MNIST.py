@@ -1,23 +1,20 @@
-import numpy as np
-import argparse
-import cv2
-from keras.layers import Conv2D
-import tensorflow as tf
-from keras.optimizers import SGD
-from sklearn.datasets import fetch_openml
-from sklearn.model_selection import train_test_split
-import argparse
-from keras.utils import to_categorical
-from cnn.neural_network import CNN
-
-# from sklearn.datasets import fetch_mldata
+import numpy as np  # Import the numpy library for numerical operations
+import argparse  # Import the argparse library for parsing command line arguments
+import cv2  # Import the OpenCV library for image processing
+from keras.layers import Conv2D  # Import the Conv2D layer from Keras for convolutional operations
+import tensorflow as tf  # Import the TensorFlow library for deep learning
+from keras.optimizers import SGD  # Import the SGD optimizer from Keras for stochastic gradient descent
+from sklearn.datasets import fetch_openml  # Import the fetch_openml function from scikit-learn to download the MNIST dataset
+from sklearn.model_selection import train_test_split  # Import the train_test_split function from scikit-learn to split the dataset into training and testing sets
+from cnn.neural_network import CNN  # Import the CNN class from the neural_network module
+# from sklearn.datasets import fetch_mldata  # Deprecated function to fetch MNIST dataset
 
 # Parse the Arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-s", "--save_model", type=int, default=-1)
-ap.add_argument("-l", "--load_model", type=int, default=-1)
-ap.add_argument("-w", "--save_weights", type=str)
-args = vars(ap.parse_args())
+ap = argparse.ArgumentParser()  # Create an ArgumentParser object to handle command line arguments
+ap.add_argument("-s", "--save_model", type=int, default=-1)  # Add an argument to save the model
+ap.add_argument("-l", "--load_model", type=int, default=-1)  # Add an argument to load a pre-trained model
+ap.add_argument("-w", "--save_weights", type=str)  # Add an argument to save the weights of the model
+args = vars(ap.parse_args())  # Parse the command line arguments and store them in a dictionary
 
 # Read/Download MNIST Dataset
 print('Loading MNIST Dataset...')
@@ -25,18 +22,23 @@ print('Loading MNIST Dataset...')
 dataset = fetch_openml('mnist_784')
 
 # Read the MNIST data as array of 784 pixels and convert to 28x28 image matrix 
+# Reshape the MNIST data to have dimensions (num_samples, 28, 28)
 mnist_data = dataset.data.values.reshape((dataset.data.shape[0], 28, 28))
+
+# Add a new axis to the data to represent the channel dimension
 mnist_data = mnist_data[:, np.newaxis, :, :]
 
-# Divide data into testing and training sets.
+# Split the data into training and testing sets
+from keras.utils import to_categorical  # Import the to_categorical function from Keras
+
 train_img, test_img, train_labels, test_labels = train_test_split(mnist_data/255.0, dataset.target.astype("int"), test_size=0.1)
 
-# Now each image rows and columns are of 28x28 matrix type.
+# Set the image dimensions
 img_rows, img_columns = 28, 28
 
-# Transform training and testing data to 10 classes in range [0,classes] ; num. of classes = 0 to 9 = 10 classes
-total_classes = 10			# 0 to 9 labels
-train_labels = to_categorical(train_labels, 10)
+# Convert the labels to categorical format
+total_classes = 10    #总类别数0-9
+train_labels = to_categorical(train_labels, 10)    #测试数据和训练数据都从类别向量（整数）转化为二进制类别矩阵
 test_labels = to_categorical(test_labels, 10)
 
 # Defing and compile the SGD optimizer and CNN model
@@ -47,10 +49,10 @@ clf.compile(loss="categorical_crossentropy", optimizer=sgd, metrics=["accuracy"]
 
 # Initially train and test the model; If weight saved already, load the weights using arguments.
 b_size = 128		# Batch size
-num_epoch = 20		# Number of epochs
-verb = 1			# Verbose
+num_epoch = 20		# Number of epochs完整训练次数
+verb = 1			# Verbose输出记录
 
-# If weights saved and argument load_model; Load the pre-trained model.
+# If weights saved and argument load_model; Load the pre-trained model.如果前面有把模型保存起来，那么就加载前面训练的模型
 if args["load_model"] < 0:
 	print('\nTraining the Model...')
 	clf.fit(train_img, train_labels, batch_size=b_size, epochs=num_epoch,verbose=verb)
