@@ -15,4 +15,3 @@ x = torch.tensor(inputs.to_numpy(dtype=float))    #将数据转化为张量
 y = torch.tensor(outputs.to_numpy(dtype=float))
 print(x,"\n")
 print(y)
-print(x.shape)

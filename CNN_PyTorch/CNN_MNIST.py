@@ -9,7 +9,8 @@ import argparse
 import numpy as np
 from sklearn.model_selection import train_test_split
 import torch
-from cnn.neural_network import CNN  # 导入CNN类
+#from cnn.neural_network import CNN  # 导入CNN类
+from cnn.neural_network_ResNet import ResNet
 
 # 解析参数
 ap = argparse.ArgumentParser()
@@ -44,7 +45,8 @@ test_labels = torch.tensor(test_labels.values).long()
 import torch.nn as nn
 
 print('\n编译模型...')
-model = CNN(width=img_rows, height=img_columns, depth=1, total_classes=total_classes)
+#model = CNN(width=img_rows, height=img_columns, depth=1, total_classes=total_classes)
+model = ResNet(num_classes=total_classes)
 optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, nesterov=True)
 criterion = nn.CrossEntropyLoss()
 
@@ -54,7 +56,8 @@ if args["load_model"] > 0:
 
 # 训练和测试模型
 b_size = 128
-num_epoch = 20
+num_epoch = 5
+losses=[]
 
 if args["load_model"] < 0:
     print('\n训练模型...')
@@ -71,6 +74,7 @@ if args["load_model"] < 0:
             output = model(data)
             loss = criterion(output, target)
             loss.backward()
+            losses.append[loss]
             optimizer.step()
 
     print('评估准确性和损失函数...')
@@ -90,7 +94,7 @@ if args["load_model"] < 0:
     test_loss /= len(test_loader.dataset)
     accuracy = correct / len(test_loader.dataset)
     print('模型准确率: {:.2f}%'.format(accuracy * 100))
-
+    print(losses)
 
 
 
