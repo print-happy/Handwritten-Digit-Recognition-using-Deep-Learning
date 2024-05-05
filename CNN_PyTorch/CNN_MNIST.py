@@ -74,7 +74,7 @@ if args["load_model"] < 0:
             output = model(data)
             loss = criterion(output, target)
             loss.backward()
-            losses.append[loss]
+            losses.append(loss.item())
             optimizer.step()
 
     print('评估准确性和损失函数...')
@@ -94,7 +94,12 @@ if args["load_model"] < 0:
     test_loss /= len(test_loader.dataset)
     accuracy = correct / len(test_loader.dataset)
     print('模型准确率: {:.2f}%'.format(accuracy * 100))
-    print(losses)
+    import matplotlib.pyplot as plt
+    plt.figure()
+    plt.plot(losses)
+    plt.xlabel('SGD times')
+    plt.ylabel('Loss')
+    plt.show()
 
 
 

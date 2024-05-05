@@ -23,7 +23,6 @@ class ResidualBlock(nn.Module):
         out = self.conv2(out)
         out = self.bn2(out)
 
-        # Adjust the channels of the identity if necessary
         if self.stride != 1 or x.size(1) != out.size(1):
             identity = self.conv1x1(identity)
 
@@ -68,5 +67,4 @@ class ResNet(nn.Module):
         x = self.fc(x)
         return x
 
-# 使用ResNet
 model = ResNet(num_classes=10)

@@ -16,8 +16,6 @@ def evaluate_accuracy(net, data_iter):
     metric = d2l.Accumulator(2)  # num_corrected_examples, num_examples
     for X, y in data_iter:
         metric.add(d2l.accuracy(net(X), y), y.numel())
-        plt.plot(X, y, 'o')
-        plt.show()
     return metric[0] / metric[1]
 
 net.apply(init_weights)
